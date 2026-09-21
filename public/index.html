@@ -1,270 +1,293 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saturn AI - Hasan Günbeyi</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Saturn AI</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icon Seti -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Inter & Fira Code -->
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Marked.js for Markdown parsing -->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Marked.js (Markdown Desteği) -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gptBg: '#212121',
+                        gptSidebar: '#171717',
+                        gptHover: '#2f2f2f',
+                        gptInput: '#2f2f2f',
+                        saturnAmber: '#f59e0b'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
-            color: #f8fafc;
+            background-color: #212121;
+            color: #ececec;
         }
 
-        /* Saturn Gezegen Animasyonu */
-        .saturn-container {
-            position: relative;
-            width: 42px;
-            height: 42px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .saturn-planet {
-            width: 22px;
-            height: 22px;
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            border-radius: 50%;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.6);
-            position: relative;
-            z-index: 2;
-        }
-
-        .saturn-ring {
-            position: absolute;
-            width: 42px;
-            height: 12px;
-            border: 3px solid rgba(251, 191, 36, 0.8);
-            border-radius: 50%;
-            transform: rotate(-25deg);
-            z-index: 1;
-            box-shadow: 0 0 10px rgba(251, 191, 36, 0.4);
-            animation: ringPulse 3s infinite alternate;
-        }
-
-        @keyframes ringPulse {
-            0% { transform: rotate(-25deg) scale(0.95); opacity: 0.8; }
-            100% { transform: rotate(-25deg) scale(1.05); opacity: 1; }
-        }
-
-        /* Cam Efekti (Glassmorphism) */
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-
-        /* Özel Scrollbar */
+        /* Özel Kaydırma Çubuğu */
         ::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: rgba(15, 23, 42, 0.5);
+            background: transparent;
         }
         ::-webkit-scrollbar-thumb {
-            background: rgba(51, 65, 85, 0.8);
-            border-radius: 10px;
+            background: #424242;
+            border-radius: 4px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: rgba(71, 85, 105, 1);
+            background: #525252;
         }
 
-        /* Kod Blokları Biçimlendirme */
-        pre {
-            background: #090d16 !important;
+        /* Markdown Biçimlendirme */
+        .markdown-body p { margin-bottom: 0.75rem; line-height: 1.6; }
+        .markdown-body p:last-child { margin-bottom: 0; }
+        .markdown-body ul { list-style-type: disc; margin-left: 1.25rem; margin-bottom: 0.75rem; }
+        .markdown-body ol { list-style-type: decimal; margin-left: 1.25rem; margin-bottom: 0.75rem; }
+        .markdown-body pre {
+            background-color: #0d0d0d !important;
             border-radius: 8px;
-            padding: 12px;
+            padding: 1rem;
+            margin: 0.75rem 0;
             overflow-x: auto;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid #333;
+        }
+        .markdown-body code {
             font-family: 'Fira Code', monospace;
             font-size: 0.875rem;
-            margin-top: 8px;
-            margin-bottom: 8px;
-            position: relative;
-        }
-        code {
-            font-family: 'Fira Code', monospace;
         }
 
-        /* Ses Dalgası Animasyonu */
-        .speaking-wave {
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            height: 16px;
-        }
-        .speaking-wave span {
-            width: 3px;
-            height: 100%;
-            background-color: #f59e0b;
-            border-radius: 3px;
-            animation: wave 1.2s ease-in-out infinite;
-        }
-        .speaking-wave span:nth-child(2) { animation-delay: 0.2s; }
-        .speaking-wave span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes wave {
-            0%, 100% { height: 4px; }
-            50% { height: 16px; }
+        /* Saturn Logo Halkası */
+        .saturn-ring-small {
+            position: absolute;
+            width: 24px;
+            height: 8px;
+            border: 2px solid #f59e0b;
+            border-radius: 50%;
+            transform: rotate(-25deg);
         }
     </style>
 </head>
-<body class="h-screen w-screen flex flex-col justify-between overflow-hidden">
+<body class="h-screen w-screen flex overflow-hidden">
 
-    <!-- ÜST BAŞLIK (HEADER) -->
-    <header class="glass-panel px-6 py-4 flex items-center justify-between z-10 shadow-lg">
-        <div class="flex items-center gap-3">
-            <div class="saturn-container">
-                <div class="saturn-planet"></div>
-                <div class="saturn-ring"></div>
-            </div>
-            <div>
-                <h1 class="font-bold text-xl tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-amber-400 via-amber-200 to-amber-500">
-                    Saturn AI
-                </h1>
-                <p class="text-xs text-slate-400 font-medium">Hasan Günbeyi tarafından geliştirildi</p>
-            </div>
-        </div>
-
-        <!-- SAĞ MENÜ (Sesli Okuma Butonu) -->
-        <div class="flex items-center gap-3">
-            <div id="speakingIndicator" class="hidden flex items-center gap-2 text-xs text-amber-400 mr-2">
-                <div class="speaking-wave">
-                    <span></span><span></span><span></span>
+    <!-- SOL KENAR ÇUBUĞU (SIDEBAR) -->
+    <aside id="sidebar" class="w-64 bg-gptSidebar flex flex-col justify-between p-3 border-r border-white/10 transition-all duration-300 z-20 shrink-0">
+        <div class="flex flex-col gap-2">
+            <!-- Yeni Sohbet Butonu -->
+            <button id="newChatBtn" class="flex items-center justify-between w-full px-3 py-2.5 rounded-lg text-sm text-zinc-200 hover:bg-gptHover transition-colors border border-white/10">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-amber-500"></i>
+                    <span class="font-medium">Yeni Sohbet</span>
                 </div>
-                <span>Okunuyor...</span>
-            </div>
-
-            <button id="ttsToggleBtn" title="Sesli Yanıtı Aç/Kapat" class="p-2.5 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-amber-400 transition-all border border-slate-700">
-                <i id="ttsIcon" class="fa-solid fa-volume-high"></i>
+                <i class="fa-solid fa-plus text-xs text-zinc-400"></i>
             </button>
-        </div>
-    </header>
 
-    <!-- SOHBET ALANI -->
-    <main id="chatContainer" class="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 max-w-4xl mx-auto w-full">
-        <!-- KARŞILAMA MESAJI -->
-        <div class="flex items-start gap-3">
-            <div class="saturn-container shrink-0 mt-1">
-                <div class="saturn-planet"></div>
-                <div class="saturn-ring"></div>
+            <!-- Geçmiş Liste Başlığı -->
+            <div class="mt-4 px-2 text-xs font-semibold text-zinc-500 uppercase tracking-wider">
+                Sohbetler
             </div>
-            <div class="glass-panel p-4 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200 border border-slate-800">
-                <p class="font-medium text-amber-400 mb-1 text-sm">Saturn AI</p>
-                <p class="text-sm leading-relaxed">
-                    Merhaba! Ben **Saturn AI**. Sana nasıl yardımcı olabilirim?
+
+            <!-- Geçmiş Listesi -->
+            <div id="chatHistoryList" class="flex flex-col gap-1 overflow-y-auto max-h-[calc(100vh-180px)]">
+                <button class="flex items-center gap-3 px-3 py-2 rounded-lg text-sm text-zinc-300 hover:bg-gptHover transition-colors text-left truncate w-full group">
+                    <i class="fa-regular fa-message text-zinc-400 group-hover:text-amber-500"></i>
+                    <span class="truncate">Saturn AI Genel Sohbet</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Kullanıcı / Geliştirici Bilgisi -->
+        <div class="pt-3 border-t border-white/10 flex items-center justify-between px-2">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center font-bold text-zinc-950 text-xs shadow-md">
+                    HG
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-sm font-semibold text-zinc-200">Hasan Günbeyi</span>
+                    <span class="text-xs text-amber-500 font-medium">Saturn AI Creator</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- SAĞ ANA İÇERİK ALANI -->
+    <main class="flex-1 flex flex-col h-full bg-gptBg relative overflow-hidden">
+
+        <!-- ÜST BAR (HEADER) -->
+        <header class="h-14 px-4 flex items-center justify-between border-b border-white/5 bg-gptBg/80 backdrop-blur z-10 shrink-0">
+            <div class="flex items-center gap-3">
+                <button id="toggleSidebar" class="p-2 text-zinc-400 hover:text-white rounded-lg hover:bg-gptHover">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="flex items-center gap-2">
+                    <span class="font-bold text-lg tracking-wide text-zinc-100">Saturn AI</span>
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">3.1 Instant</span>
+                </div>
+            </div>
+
+            <!-- Sesli Okuma / TTS Ayarı -->
+            <div class="flex items-center gap-2">
+                <button id="ttsToggleBtn" title="Sesli Yanıtı Aç/Kapat" class="p-2 text-zinc-400 hover:text-amber-400 rounded-lg hover:bg-gptHover transition-colors">
+                    <i id="ttsIcon" class="fa-solid fa-volume-high"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- SOHBET AKIŞ ALANI -->
+        <div id="chatContainer" class="flex-1 overflow-y-auto px-4 py-6">
+            <div class="max-w-3xl mx-auto space-y-6">
+
+                <!-- KARŞILAMA EKRANI (Boş Sohbet Durumu) -->
+                <div id="welcomeScreen" class="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-4">
+                    <div class="relative w-16 h-16 flex items-center justify-center bg-gradient-to-tr from-amber-600 to-amber-400 rounded-2xl shadow-xl shadow-amber-500/10">
+                        <i class="fa-solid fa-planet text-3xl text-zinc-950"></i>
+                    </div>
+                    <h2 class="text-2xl font-bold text-zinc-100">Bugün nasıl yardımcı olabilirim?</h2>
+                    <p class="text-sm text-zinc-400 max-w-md">
+                        Saturn AI, Hasan Günbeyi tarafından geliştirilmiş yüksek hızlı bir yapay zeka asistanıdır.
+                    </p>
+
+                    <!-- Örnek İpuçları -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-xl pt-4">
+                        <button onclick="sendPrompt('Seni kim geliştirdi?')" class="p-3 text-left bg-zinc-800/50 hover:bg-zinc-800 border border-white/5 rounded-xl text-xs text-zinc-300 transition-colors">
+                            <span class="font-semibold block text-amber-400 mb-0.5">Geliştirici Hakkında</span>
+                            Seni kim geliştirdi ve ne amaçla tasarlandın?
+                        </button>
+                        <button onclick="sendPrompt('Bana JavaScript ile bir kronometre kodu yaz.')" class="p-3 text-left bg-zinc-800/50 hover:bg-zinc-800 border border-white/5 rounded-xl text-xs text-zinc-300 transition-colors">
+                            <span class="font-semibold block text-amber-400 mb-0.5">Kod Örneği İsteyin</span>
+                            JavaScript ile hızlı bir kronometre uygulaması yaz.
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mesajlar Buraya Dinamik Eklenir -->
+                <div id="messageList" class="space-y-6 hidden"></div>
+
+            </div>
+        </div>
+
+        <!-- ALT MESAJA GİRİŞ ALANI (CHATGPT STYLE INPUT) -->
+        <footer class="p-4 bg-gptBg border-t border-white/5 shrink-0">
+            <div class="max-w-3xl mx-auto space-y-2">
+                <div class="relative flex items-center bg-gptInput border border-white/10 rounded-2xl p-2 shadow-lg focus-within:border-white/20 transition-all">
+                    
+                    <!-- Sesli Giriş (Mikrofon) -->
+                    <button id="micBtn" title="Sesli Konuş" class="p-2.5 text-zinc-400 hover:text-amber-400 rounded-xl hover:bg-zinc-700/50 transition-colors shrink-0">
+                        <i id="micIcon" class="fa-solid fa-microphone"></i>
+                    </button>
+
+                    <!-- Textarea Girdi Kutusu -->
+                    <textarea id="userInput" rows="1" placeholder="Saturn AI'a bir mesaj yazın..."
+                        class="w-full bg-transparent text-zinc-100 px-3 py-1.5 focus:outline-none resize-none text-sm placeholder-zinc-500 max-h-36 leading-relaxed"></textarea>
+
+                    <!-- Gönder Butonu -->
+                    <button id="sendBtn" class="p-2.5 bg-amber-500 hover:bg-amber-600 text-zinc-950 font-bold rounded-xl transition-all shrink-0 disabled:opacity-40">
+                        <i class="fa-solid fa-arrow-up text-base"></i>
+                    </button>
+                </div>
+
+                <!-- Alt Dipnot -->
+                <p class="text-[11px] text-center text-zinc-500">
+                    Saturn AI hata yapabilir. Önemli bilgileri kontrol edin. • Hasan Günbeyi
                 </p>
             </div>
-        </div>
+        </footer>
+
     </main>
 
-    <!-- ALT GİRİŞ ALANI (INPUT) -->
-    <footer class="p-4 glass-panel border-t border-slate-800 z-10">
-        <div class="max-w-4xl mx-auto flex items-center gap-2">
-            <!-- MİKROFON BUTONU -->
-            <button id="micBtn" title="Sesle Konuş" class="p-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-amber-400 transition-all border border-slate-700 shrink-0">
-                <i id="micIcon" class="fa-solid fa-microphone"></i>
-            </button>
-
-            <!-- METİN GİRDİ ALANI -->
-            <textarea id="userInput" rows="1" placeholder="Saturn AI'a bir şeyler sorun..." 
-                class="flex-1 bg-slate-900/90 text-slate-100 rounded-xl px-4 py-3 border border-slate-700 focus:outline-none focus:border-amber-500/80 resize-none max-h-32 text-sm placeholder-slate-500"></textarea>
-
-            <!-- GÖNDER BUTONU -->
-            <button id="sendBtn" class="p-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold transition-all shadow-lg shadow-amber-500/20 shrink-0">
-                <i class="fa-solid fa-paper-plane text-base"></i>
-            </button>
-        </div>
-    </footer>
-
-    <!-- JAVASCRIPT KODLARI -->
     <script>
         // DOM Elemanları
+        const sidebar = document.getElementById('sidebar');
+        const toggleSidebar = document.getElementById('toggleSidebar');
         const chatContainer = document.getElementById('chatContainer');
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const messageList = document.getElementById('messageList');
         const userInput = document.getElementById('userInput');
         const sendBtn = document.getElementById('sendBtn');
         const micBtn = document.getElementById('micBtn');
         const micIcon = document.getElementById('micIcon');
         const ttsToggleBtn = document.getElementById('ttsToggleBtn');
         const ttsIcon = document.getElementById('ttsIcon');
-        const speakingIndicator = document.getElementById('speakingIndicator');
+        const newChatBtn = document.getElementById('newChatBtn');
 
-        // Durum Değişkenleri
         let chatHistory = [];
         let ttsEnabled = true;
         let isRecognizing = false;
         let recognition = null;
 
-        // Web Speech API (Ses Tanıma) Kurulumu
-        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            recognition = new SpeechRecognition();
-            recognition.lang = 'tr-TR';
-            recognition.continuous = false;
-            recognition.interimResults = false;
-
-            recognition.onstart = () => {
-                isRecognizing = true;
-                micBtn.classList.add('bg-red-600', 'text-white', 'animate-pulse');
-                micBtn.classList.remove('bg-slate-800', 'text-slate-300');
-            };
-
-            recognition.onend = () => {
-                isRecognizing = false;
-                micBtn.classList.remove('bg-red-600', 'text-white', 'animate-pulse');
-                micBtn.classList.add('bg-slate-800', 'text-slate-300');
-            };
-
-            recognition.onresult = (event) => {
-                const transcript = event.results[0][0].transcript;
-                userInput.value = transcript;
-                sendMessage();
-            };
-        } else {
-            micBtn.style.display = 'none';
-        }
-
-        // Sesli Okuma (TTS) Açma/Kapatma
-        ttsToggleBtn.addEventListener('click', () => {
-            ttsEnabled = !ttsEnabled;
-            if (ttsEnabled) {
-                ttsIcon.className = "fa-solid fa-volume-high";
-                ttsToggleBtn.classList.remove('opacity-50');
-            } else {
-                ttsIcon.className = "fa-solid fa-volume-xmark";
-                ttsToggleBtn.classList.add('opacity-50');
-                window.speechSynthesis.cancel();
-                speakingIndicator.classList.add('hidden');
-            }
+        // Sidebar Aç/Kapat
+        toggleSidebar.addEventListener('click', () => {
+            sidebar.classList.toggle('-ml-64');
         });
 
-        // Sesli Mesaj Butonu
-        micBtn.addEventListener('click', () => {
-            if (!recognition) return;
-            if (isRecognizing) {
-                recognition.stop();
-            } else {
-                recognition.start();
-            }
-        });
-
-        // Mesaj Alanı Otomatik Boyutlandırma
+        // Metin Kutusu Otomatik Yükseklik Ayarı
         userInput.addEventListener('input', function() {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
 
-        // Enter ile Gönderme
+        // Speech Recognition (Sesli Konuşma)
+        if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            recognition = new SpeechRecognition();
+            recognition.lang = 'tr-TR';
+
+            recognition.onstart = () => {
+                isRecognizing = true;
+                micIcon.className = "fa-solid fa-circle-stop text-red-500 animate-pulse";
+            };
+
+            recognition.onend = () => {
+                isRecognizing = false;
+                micIcon.className = "fa-solid fa-microphone text-zinc-400";
+            };
+
+            recognition.onresult = (e) => {
+                userInput.value = e.results[0][0].transcript;
+                sendMessage();
+            };
+
+            micBtn.addEventListener('click', () => {
+                if (isRecognizing) recognition.stop();
+                else recognition.start();
+            });
+        } else {
+            micBtn.style.display = 'none';
+        }
+
+        // Text-to-Speech Toggle
+        ttsToggleBtn.addEventListener('click', () => {
+            ttsEnabled = !ttsEnabled;
+            ttsIcon.className = ttsEnabled ? "fa-solid fa-volume-high text-amber-400" : "fa-solid fa-volume-xmark text-zinc-500";
+            if (!ttsEnabled) window.speechSynthesis.cancel();
+        });
+
+        // Yeni Sohbet
+        newChatBtn.addEventListener('click', () => {
+            chatHistory = [];
+            messageList.innerHTML = '';
+            messageList.classList.add('hidden');
+            welcomeScreen.classList.remove('hidden');
+        });
+
+        // Enter ile Gönder
         userInput.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -274,100 +297,99 @@
 
         sendBtn.addEventListener('click', sendMessage);
 
-        // Mesaj Gönderme Fonksiyonu
-        async function sendMessage() {
-            const message = userInput.value.trim();
-            if (!message) return;
+        function sendPrompt(text) {
+            userInput.value = text;
+            sendMessage();
+        }
 
-            // Kullanıcı Mesajını Ekrana Ekle
-            appendMessage('user', message);
+        // Mesaj Gönderimi
+        async function sendMessage() {
+            const text = userInput.value.trim();
+            if (!text) return;
+
+            if (welcomeScreen.classList.contains('hidden') === false) {
+                welcomeScreen.classList.add('hidden');
+                messageList.classList.remove('hidden');
+            }
+
+            // Kullanıcı Mesajını Ekle
+            appendUserMessage(text);
+            chatHistory.push({ role: 'user', content: text });
+
             userInput.value = '';
             userInput.style.height = 'auto';
 
-            // Sohbet Geçmişine Ekle
-            chatHistory.push({ role: 'user', content: message });
-
-            // Yükleniyor Göstergesi
+            // Yükleniyor Mesajı
             const loadingId = appendLoading();
 
             try {
-                // Node.js Backend API'sine İstek Atıyoruz
-                const response = await fetch('/api/chat', {
+                const res = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ messages: chatHistory })
                 });
 
-                const data = await response.json();
+                const data = await res.json();
                 removeLoading(loadingId);
 
                 if (data.reply) {
-                    appendMessage('assistant', data.reply);
+                    appendAssistantMessage(data.reply);
                     chatHistory.push({ role: 'assistant', content: data.reply });
 
-                    // Sesli Okuma Yap
-                    if (ttsEnabled) {
-                        speakText(data.reply);
-                    }
+                    if (ttsEnabled) speakText(data.reply);
                 } else {
-                    appendMessage('assistant', 'Bir hata oluştu: Yanıt alınamadı.');
+                    appendAssistantMessage("Bir hata oluştu. Lütfen tekrar deneyin.");
                 }
-
-            } catch (error) {
+            } catch (err) {
                 removeLoading(loadingId);
-                appendMessage('assistant', 'Sunucu ile bağlantı kurulamadı. Lütfen sunucunuzun çalıştığından emin olun.');
+                appendAssistantMessage("Sunucuya bağlanılamadı.");
             }
         }
 
-        // Ekrana Mesaj Ekleme
-        function appendMessage(role, text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'flex items-start gap-3 ' + (role === 'user' ? 'justify-end' : '');
-
-            if (role === 'user') {
-                msgDiv.innerHTML = `
-                    <div class="bg-amber-500/20 border border-amber-500/30 p-4 rounded-2xl rounded-tr-none max-w-[85%] text-slate-100">
-                        <p class="font-medium text-amber-400 mb-1 text-xs text-right">Siz</p>
-                        <p class="text-sm leading-relaxed">${escapeHtml(text)}</p>
-                    </div>
-                `;
-            } else {
-                const parsedText = marked.parse(text);
-                msgDiv.innerHTML = `
-                    <div class="saturn-container shrink-0 mt-1">
-                        <div class="saturn-planet"></div>
-                        <div class="saturn-ring"></div>
-                    </div>
-                    <div class="glass-panel p-4 rounded-2xl rounded-tl-none max-w-[85%] text-slate-200 border border-slate-800">
-                        <p class="font-medium text-amber-400 mb-1 text-xs">Saturn AI</p>
-                        <div class="text-sm leading-relaxed">${parsedText}</div>
-                    </div>
-                `;
-            }
-
-            chatContainer.appendChild(msgDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
-
-        // Yükleniyor Animasyonu
-        function appendLoading() {
-            const id = 'loading-' + Date.now();
-            const loadDiv = document.createElement('div');
-            loadDiv.id = id;
-            loadDiv.className = 'flex items-start gap-3';
-            loadDiv.innerHTML = `
-                <div class="saturn-container shrink-0 mt-1">
-                    <div class="saturn-planet"></div>
-                    <div class="saturn-ring"></div>
+        function appendUserMessage(text) {
+            const div = document.createElement('div');
+            div.className = "flex justify-end";
+            div.innerHTML = `
+                <div class="bg-gptHover text-zinc-100 max-w-[80%] px-4 py-3 rounded-2xl rounded-tr-sm text-sm">
+                    ${escapeHtml(text)}
                 </div>
-                <div class="glass-panel p-4 rounded-2xl rounded-tl-none border border-slate-800 flex items-center gap-2">
+            `;
+            messageList.appendChild(div);
+            scrollToBottom();
+        }
+
+        function appendAssistantMessage(text) {
+            const div = document.createElement('div');
+            div.className = "flex gap-4 items-start";
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center shrink-0 shadow-md">
+                    <i class="fa-solid fa-planet text-zinc-950 text-sm"></i>
+                </div>
+                <div class="flex-1 text-zinc-200 text-sm markdown-body leading-relaxed">
+                    ${marked.parse(text)}
+                </div>
+            `;
+            messageList.appendChild(div);
+            scrollToBottom();
+        }
+
+        function appendLoading() {
+            const id = 'load-' + Date.now();
+            const div = document.createElement('div');
+            div.id = id;
+            div.className = "flex gap-4 items-start";
+            div.innerHTML = `
+                <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-600 to-amber-400 flex items-center justify-center shrink-0">
+                    <i class="fa-solid fa-planet text-zinc-950 text-sm animate-spin"></i>
+                </div>
+                <div class="flex items-center gap-1.5 py-2">
                     <div class="w-2 h-2 bg-amber-400 rounded-full animate-bounce"></div>
                     <div class="w-2 h-2 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                     <div class="w-2 h-2 bg-amber-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                 </div>
             `;
-            chatContainer.appendChild(loadDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
+            messageList.appendChild(div);
+            scrollToBottom();
             return id;
         }
 
@@ -376,39 +398,22 @@
             if (el) el.remove();
         }
 
-        // Metni Türkçe Seslendirme (Text-to-Speech)
-        function speakText(text) {
-            if (!('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel(); // Önceki sesleri durdur
-            
-            // HTML etiketlerini ve markdown işaretlerini temizle
-            const cleanText = text.replace(/<[^>]*>?/gm, '').replace(/[\*\_~`]/g, '');
-
-            const utterance = new SpeechSynthesisUtterance(cleanText);
-            utterance.lang = 'tr-TR';
-            utterance.rate = 1.0;
-
-            utterance.onstart = () => {
-                speakingIndicator.classList.remove('hidden');
-            };
-
-            utterance.onend = () => {
-                speakingIndicator.classList.add('hidden');
-            };
-
-            window.speechSynthesis.speak(utterance);
+        function scrollToBottom() {
+            chatContainer.scrollTop = chatContainer.scrollHeight;
         }
 
-        function escapeHtml(string) {
-            return String(string).replace(/[&<>"']/g, function (s) {
-                return {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    '"': '&quot;',
-                    "'": '&#39;'
-                }[s];
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const clean = text.replace(/<[^>]*>?/gm, '').replace(/[\*\_~`]/g, '');
+            const ut = new SpeechSynthesisUtterance(clean);
+            ut.lang = 'tr-TR';
+            window.speechSynthesis.speak(ut);
+        }
+
+        function escapeHtml(str) {
+            return String(str).replace(/[&<>"']/g, function (s) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[s];
             });
         }
     </script>
