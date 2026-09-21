@@ -7,10 +7,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Public klasöründeki frontend dosyalarını sunuyoruz
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Groq API Bağlantısı (API Anahtarını Render Ortam Değişkeninden alacak)
 const groq = new Groq({
     apiKey: process.env.GROQ_API_KEY
 });
@@ -23,7 +21,7 @@ app.post('/api/chat', async (req, res) => {
             return res.status(400).json({ error: "Geçersiz istek biçimi." });
         }
 
-        // Yapımcı Kimliği ve Sistem Komutu
+        // Yapımcı Kimliği ve Matematik Sembol Kuralı
         const systemPrompt = {
             role: "system",
             content: (
@@ -31,13 +29,14 @@ app.post('/api/chat', async (req, res) => {
                 + "Hasan Günbeyi tarafından geliştirildin. "
                 + "Sana yapımcın, seni kimin yaptığı veya kime ait olduğun sorulduğunda "
                 + "gururla 'Ben Saturn AI. Hasan Günbeyi tarafından geliştirildim.' yanıtını ver. "
+                + "Matematiksel işlemlerde ve hesaplamalarda kesinlikle yazılım/bilgisayar sembolleri (örneğin '*', '/') KULLANMA. "
+                + "Bunun yerine günlük hayatta ve okulda kullanılan geleneksel matematik işaretlerini (çarpma için '×', bölme için '÷') tercih et. "
                 + "Kullanıcıya daima Türkçe ve nazik bir dille yanıt ver."
             )
         };
 
         const fullMessages = [systemPrompt, ...messages];
 
-        // Groq API Çağrısı
         const response = await groq.chat.completions.create({
             messages: fullMessages,
             model: "openai/gpt-oss-20b",
@@ -54,7 +53,6 @@ app.post('/api/chat', async (req, res) => {
     }
 });
 
-// Render'ın atayacağı Port üzerinden sunucuyu başlatıyoruz
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Saturn AI sunucusu ${PORT} portunda aktif!`);
